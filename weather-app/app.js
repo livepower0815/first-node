@@ -1,22 +1,23 @@
-const request = require('request')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 
-const url = 'https://api.darksky.net/forecast/d0074e4a1ffcea10a3b2d4d734e3b798/37.8267,-122.4233'
+const address = process.argv[2]
 
-request({ url, json: true }, (error, response) => {
-  if (error) {
-    console.log('Unable to connect to weather service')
-  } else {
-    console.log(response.body.currently)
-  }
-  
-})
+if (!address) {
+    console.log('Please provide an address')
+} else {
+    geocode(address, (error, { latitude, longitude, location }) => {
+        if (error) {
+            return console.log(error)
+        }
 
-const geocodingURL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/georgia.json?types=country&access_token=pk.eyJ1IjoibGl2ZXBvd2VyMDgxNSIsImEiOiJjazRudnl0Nmwxd3VlM2lxczAzYmFzeHVvIn0.DkFDtqpy0N6HkBPbSXChTw'
+        forecast(latitude, longitude, (error, forecastData) => {
+            if (error) {
+                return console.log(error)
+            }
 
-// request({ url: geocodingURL, json: true }, (error, response) => {
-//   const latitude = response.body.features[0].center[1]
-//   const longitude = response.body.features[0].center[0]
-
-//   console.log('latitude:', latitude)
-//   console.log('longitude:', longitude)
-// })
+            console.log(location)
+            console.log(forecastData)
+        })
+    })
+}
