@@ -1,18 +1,15 @@
+const { calculateTip } = require('../src/math')
+
 test('Hello world!', () => {
 
 })
 
-test('This should fail', () => {
-    throw new Error('Failure!')
+test('Should calculate total with tip', () => {
+    const total = calculateTip(10, .4)
+    expect(total).toBe(14)
 })
 
-// 
-// Why test?
-// 
-// - Saves time
-// - Creates reliable software
-// - Gives flexibility to developers
-//   - Refactoring
-//   - Collaborating
-//   - Profiling
-// - Peace of mind
+test('should calculate total with default tip', () => {
+    const total = calculateTip(10)
+    expect(total).toBe(12.5)
+})
